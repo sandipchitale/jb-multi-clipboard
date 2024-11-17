@@ -106,7 +106,7 @@ public class SystemMultiClipboardPasteAction extends AnAction implements DumbAwa
 
         SystemMultiClipboardContentChooser(Project project) {
             super(project, "Choose System Clipboard Content to Paste", true, true);
-            setOKButtonText(ActionsBundle.actionText(IdeActions.ACTION_EDITOR_PASTE));
+            setOKButtonText(ActionsBundle.actionText(IdeActions.ACTION_EDITOR_PASTE_SIMPLE));
             setOKButtonMnemonic('P');
         }
 
