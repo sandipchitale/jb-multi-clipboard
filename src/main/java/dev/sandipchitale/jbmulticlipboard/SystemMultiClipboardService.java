@@ -7,5 +7,10 @@ import java.util.List;
 
 public interface SystemMultiClipboardService {
     List<Transferable> getClipboardTextTransferables();
+
     ListWrappingTableModel getTableModel();
+
+    void clearClipboardTextTransferables();
+
+    void removeContent(Transferable content);
 }

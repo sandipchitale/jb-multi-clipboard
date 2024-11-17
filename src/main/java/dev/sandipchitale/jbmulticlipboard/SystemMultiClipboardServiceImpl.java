@@ -15,7 +15,6 @@ final public class SystemMultiClipboardServiceImpl implements SystemMultiClipboa
 
     private static Clipboard systemClipboard;
     private static String lastClipboardText = null;
-    private static Timer timer;
     private static List<String> clipboardTexts;
     private static ListWrappingTableModel listWrappingTableModel;
 
@@ -25,7 +24,7 @@ final public class SystemMultiClipboardServiceImpl implements SystemMultiClipboa
         clipboardTexts = new ArrayList<>();
         listWrappingTableModel = new ListWrappingTableModel(clipboardTexts, "Clips");
 
-        timer = new Timer(1000, (ActionEvent e) -> {
+        Timer timer = new Timer(1000, (ActionEvent e) -> {
             try {
                 String clipboardText = (String) systemClipboard.getData(DataFlavor.stringFlavor);
                 if (clipboardText != null && !clipboardText.equals(lastClipboardText)) {
@@ -45,5 +44,15 @@ final public class SystemMultiClipboardServiceImpl implements SystemMultiClipboa
 
     public ListWrappingTableModel getTableModel() {
         return listWrappingTableModel;
+    }
+
+    @Override
+    public void clearClipboardTextTransferables() {
+        clipboardTexts.clear();
+    }
+
+    @Override
+    public void removeContent(Transferable content) {
+        // TODO
     }
 }
