@@ -12,7 +12,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.UIBundle;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
@@ -56,7 +55,6 @@ public class SystemMultiClipboardPasteAction extends AnAction implements DumbAwa
             } else {
                 copyPasteManager.setContents(new StringSelection(chooser.getSelectedText()));
             }
-
             if (editor != null) {
                 if (editor.isViewer()) return;
 
@@ -116,16 +114,10 @@ public class SystemMultiClipboardPasteAction extends AnAction implements DumbAwa
 
         @Override
         protected Action @NotNull [] createActions() {
-            return new Action[]{getHelpAction(),
+            return new Action[]{
                     getOKAction(),
-                    new SystemMultiClipboardPasteAction.SystemMultiClipboardContentChooser.PasteSimpleAction(),
+//                    new SystemMultiClipboardPasteAction.SystemMultiClipboardContentChooser.PasteSimpleAction(),
                     getCancelAction()};
-        }
-
-        @Nullable
-        @Override
-        protected String getHelpId() {
-            return "ixPasteSelected";
         }
 
         @Override
@@ -148,15 +140,15 @@ public class SystemMultiClipboardPasteAction extends AnAction implements DumbAwa
             ApplicationManager.getApplication().getService(SystemMultiClipboardService.class).removeContent(content);
         }
 
-        final class PasteSimpleAction extends DialogWrapperAction {
-            private PasteSimpleAction() {
-                super(ActionsBundle.actionText(IdeActions.ACTION_EDITOR_PASTE_SIMPLE));
-            }
-
-            @Override
-            protected void doAction(ActionEvent e) {
-                close(getPasteSimpleExitCode());
-            }
-        }
+//        final class PasteSimpleAction extends DialogWrapperAction {
+//            private PasteSimpleAction() {
+//                super(ActionsBundle.actionText(IdeActions.ACTION_EDITOR_PASTE_SIMPLE));
+//            }
+//
+//            @Override
+//            protected void doAction(ActionEvent e) {
+//                close(getPasteSimpleExitCode());
+//            }
+//        }
     }
 }

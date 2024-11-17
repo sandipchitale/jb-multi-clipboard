@@ -24,6 +24,7 @@ public class SystemMultiClipboardToolWindow {
         this.project = project;
         ListWrappingTableModel clipboardTextsModel = ApplicationManager.getApplication().getService(SystemMultiClipboardService.class).getTableModel();
         JBTable clipboardTexts = new JBTable(clipboardTextsModel);
+        clipboardTexts.getTableHeader().setEnabled(false);
 
         contentToolWindow = new SimpleToolWindowPanel(true, true);
         JBScrollPane scrollPane = new JBScrollPane(clipboardTexts,
@@ -36,7 +37,6 @@ public class SystemMultiClipboardToolWindow {
         clearButton.setToolTipText("Clear Clips");
         clearButton.addActionListener((ActionEvent actionEvent) -> {
             ApplicationManager.getApplication().getService(SystemMultiClipboardService.class).clearClipboardTextTransferables();
-            clipboardTextsModel.fireTableDataChanged();
         });
         toolbar.add(clearButton);
         toolbar.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 0));

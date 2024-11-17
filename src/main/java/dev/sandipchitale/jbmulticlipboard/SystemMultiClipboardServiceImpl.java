@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,14 +21,18 @@ final public class SystemMultiClipboardServiceImpl implements SystemMultiClipboa
     public SystemMultiClipboardServiceImpl() {
         systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 
-        clipboardTexts = new ArrayList<>();
-        listWrappingTableModel = new ListWrappingTableModel(clipboardTexts, "Clips");
+        clipboardTexts = new LinkedList<>();
+        listWrappingTableModel = new ListWrappingTableModel(clipboardTexts, "");
 
         Timer timer = new Timer(1000, (ActionEvent e) -> {
             try {
                 String clipboardText = (String) systemClipboard.getData(DataFlavor.stringFlavor);
                 if (clipboardText != null && !clipboardText.equals(lastClipboardText)) {
-                    listWrappingTableModel.addRow(clipboardText);
+                    if (clipboardTexts.contains(clipboardText)) {
+                        clipboardTexts.remove(clipboardText);
+                    }
+                    clipboardTexts.add(0, clipboardText);
+                    listWrappingTableModel.fireTableDataChanged();
                     lastClipboardText = clipboardText;
                 }
             } catch (UnsupportedFlavorException | IOException ignore) {
@@ -49,6 +53,7 @@ final public class SystemMultiClipboardServiceImpl implements SystemMultiClipboa
     @Override
     public void clearClipboardTextTransferables() {
         clipboardTexts.clear();
+        listWrappingTableModel.fireTableDataChanged();
     }
 
     @Override
