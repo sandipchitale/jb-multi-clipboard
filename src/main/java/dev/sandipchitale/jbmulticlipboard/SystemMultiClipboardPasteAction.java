@@ -58,9 +58,7 @@ public class SystemMultiClipboardPasteAction extends AnAction implements DumbAwa
             if (editor != null) {
                 if (editor.isViewer()) return;
 
-                final AnAction pasteAction = ActionManager.getInstance().getAction(chooser.getExitCode() == getPasteSimpleExitCode()
-                        ? IdeActions.ACTION_EDITOR_PASTE_SIMPLE
-                        : IdeActions.ACTION_PASTE);
+                final AnAction pasteAction = ActionManager.getInstance().getAction(IdeActions.ACTION_EDITOR_PASTE_SIMPLE);
                 AnActionEvent newEvent = new AnActionEvent(e.getInputEvent(),
                         DataManager.getInstance().getDataContext(focusedComponent),
                         e.getPlace(), e.getPresentation(),
@@ -107,7 +105,7 @@ public class SystemMultiClipboardPasteAction extends AnAction implements DumbAwa
     static class SystemMultiClipboardContentChooser extends ContentChooser<Transferable> {
 
         SystemMultiClipboardContentChooser(Project project) {
-            super(project, UIBundle.message("choose.content.to.paste.dialog.title"), true, true);
+            super(project, "Choose System Clipboard Content to Paste", true, true);
             setOKButtonText(ActionsBundle.actionText(IdeActions.ACTION_EDITOR_PASTE));
             setOKButtonMnemonic('P');
         }
@@ -116,7 +114,6 @@ public class SystemMultiClipboardPasteAction extends AnAction implements DumbAwa
         protected Action @NotNull [] createActions() {
             return new Action[]{
                     getOKAction(),
-//                    new SystemMultiClipboardPasteAction.SystemMultiClipboardContentChooser.PasteSimpleAction(),
                     getCancelAction()};
         }
 
@@ -139,16 +136,5 @@ public class SystemMultiClipboardPasteAction extends AnAction implements DumbAwa
         protected void removeContentAt(final Transferable content) {
             ApplicationManager.getApplication().getService(SystemMultiClipboardService.class).removeContent(content);
         }
-
-//        final class PasteSimpleAction extends DialogWrapperAction {
-//            private PasteSimpleAction() {
-//                super(ActionsBundle.actionText(IdeActions.ACTION_EDITOR_PASTE_SIMPLE));
-//            }
-//
-//            @Override
-//            protected void doAction(ActionEvent e) {
-//                close(getPasteSimpleExitCode());
-//            }
-//        }
     }
 }
