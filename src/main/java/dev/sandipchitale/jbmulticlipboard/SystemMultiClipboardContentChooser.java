@@ -1,5 +1,6 @@
 package dev.sandipchitale.jbmulticlipboard;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.actions.ContentChooser;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NlsContexts;
@@ -41,6 +42,6 @@ public class SystemMultiClipboardContentChooser extends ContentChooser<Transfera
 
     @Override
     protected java.util.@NotNull List<Transferable> getContents() {
-        return clipboardTextTransferables;
+        return ApplicationManager.getApplication().getService(SystemMultiClipboardService.class).getClipboardTextTransferables();
     }
 }

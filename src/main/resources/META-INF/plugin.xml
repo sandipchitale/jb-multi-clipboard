@@ -37,6 +37,7 @@
                 displayType="TOOL_WINDOW"
         />
 
+        <applicationService serviceInterface="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardService" serviceImplementation="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardServiceImpl"/>
         <customPasteProvider implementation="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardPasteProvider"/>
     </extensions>
 </idea-plugin>

@@ -1,6 +1,8 @@
 package dev.sandipchitale.jbmulticlipboard;
 
+import com.intellij.codeInspection.ui.ListWrappingTableModel;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
@@ -10,11 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -26,7 +26,6 @@ public class SystemMultiClipboardToolWindow {
     @NotNull
     private final Project project;
     private final JPanel contentToolWindow;
-    private final Timer timer;
 
     public SystemMultiClipboardToolWindow(@NotNull Project project) {
         this.project = project;
@@ -34,27 +33,10 @@ public class SystemMultiClipboardToolWindow {
             systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         }
 
-        DefaultTableModel clipboardTextsModel = new DefaultTableModel(new String[]{"Clips"}, 0);
+        ListWrappingTableModel clipboardTextsModel = ApplicationManager.getApplication().getService(SystemMultiClipboardService.class).getTableModel();
         JBTable clipboardTexts = new JBTable(clipboardTextsModel);
-        timer = new Timer(1000, (ActionEvent e) -> {
-            try {
-                String clipboardText = (String) SystemMultiClipboardToolWindow.systemClipboard.getData(DataFlavor.stringFlavor);
-                if (clipboardText != null && !clipboardText.equals(lastClipboardText[0])) {
-                    clipboardTextsModel.addRow(new String[]{clipboardText});
-                    lastClipboardText[0] = clipboardText;
-                }
-            } catch (UnsupportedFlavorException | IOException ignore) {
-            }
-        });
-        timer.start();
 
-        contentToolWindow = new SimpleToolWindowPanel(true, true) {
-            @Override
-            public void removeNotify() {
-                timer.stop();
-                super.removeNotify();
-            }
-        };
+        contentToolWindow = new SimpleToolWindowPanel(true, true);
         JBScrollPane scrollPane = new JBScrollPane(clipboardTexts,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -66,7 +48,7 @@ public class SystemMultiClipboardToolWindow {
         clearButton.addActionListener((ActionEvent actionEvent) -> {
             int rowCount = clipboardTextsModel.getRowCount();
             java.util.List<Transferable> clipboardTextTransferables = new ArrayList<>(rowCount);
-            for (int i = 0 ; i < rowCount; i ++) {
+            for (int i = 0; i < rowCount; i++) {
                 String clipboardTextAtI = (String) clipboardTextsModel.getValueAt(i, 0);
                 clipboardTextTransferables.add(new StringSelection(clipboardTextAtI));
             }
