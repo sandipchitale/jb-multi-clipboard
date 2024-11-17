@@ -1,7 +1,6 @@
 package dev.sandipchitale.jbmulticlipboard;
 
 import com.intellij.ide.CopyPasteManagerEx;
-import com.intellij.ide.DataManager;
 import com.intellij.idea.ActionsBundle;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
@@ -10,7 +9,6 @@ import com.intellij.openapi.editor.actions.ContentChooser;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.ui.UIBundle;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -31,10 +29,10 @@ public class SystemMultiClipboardPasteAction extends AnAction implements DumbAwa
     }
 
     @Override
-    public void actionPerformed(@NotNull final AnActionEvent e) {
-        final DataContext dataContext = e.getDataContext();
+    public void actionPerformed(@NotNull final AnActionEvent actionEvent) {
+        final DataContext dataContext = actionEvent.getDataContext();
         Project project = CommonDataKeys.PROJECT.getData(dataContext);
-        Component focusedComponent = e.getData(PlatformCoreDataKeys.CONTEXT_COMPONENT);
+        Component focusedComponent = actionEvent.getData(PlatformCoreDataKeys.CONTEXT_COMPONENT);
         Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
 
         if (!(focusedComponent instanceof JComponent)) return;
@@ -55,16 +53,18 @@ public class SystemMultiClipboardPasteAction extends AnAction implements DumbAwa
             } else {
                 copyPasteManager.setContents(new StringSelection(chooser.getSelectedText()));
             }
+            final ActionManager actionManager = ActionManager.getInstance();
             if (editor != null) {
                 if (editor.isViewer()) return;
 
-                final AnAction pasteAction = ActionManager.getInstance().getAction(IdeActions.ACTION_EDITOR_PASTE_SIMPLE);
-                AnActionEvent newEvent = new AnActionEvent(e.getInputEvent(),
-                        DataManager.getInstance().getDataContext(focusedComponent),
-                        e.getPlace(), e.getPresentation(),
-                        ActionManager.getInstance(),
-                        e.getModifiers());
-                pasteAction.actionPerformed(newEvent);
+                final AnAction pasteAction = actionManager.getAction(IdeActions.ACTION_EDITOR_PASTE_SIMPLE);
+                actionManager.tryToExecute(
+                        pasteAction,
+                        actionEvent.getInputEvent(),
+                        actionEvent.getDataContext().getData(PlatformDataKeys.CONTEXT_COMPONENT),
+                        actionEvent.getPlace(),
+                        true
+                );
             } else {
                 final Action pasteAction = ((JComponent) focusedComponent).getActionMap().get(DefaultEditorKit.pasteAction);
                 if (pasteAction != null) {
