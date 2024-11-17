@@ -2,6 +2,7 @@ package dev.sandipchitale.jbmulticlipboard;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
@@ -11,11 +12,11 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.datatransfer.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class SystemMultiClipboardToolWindow {
 
@@ -63,7 +64,27 @@ public class SystemMultiClipboardToolWindow {
         JButton clearButton = new JButton(AllIcons.General.Remove);
         clearButton.setToolTipText("Clear Clips");
         clearButton.addActionListener((ActionEvent actionEvent) -> {
-            clipboardTextsModel.setRowCount(0);
+            int rowCount = clipboardTextsModel.getRowCount();
+            java.util.List<Transferable> clipboardTextTransferables = new ArrayList<>(rowCount);
+            for (int i = 0 ; i < rowCount; i ++) {
+                String clipboardTextAtI = (String) clipboardTextsModel.getValueAt(i, 0);
+                clipboardTextTransferables.add(new StringSelection(clipboardTextAtI));
+            }
+            SystemMultiClipboardContentChooser.setClipboardTextTransferables(clipboardTextTransferables);
+            SystemMultiClipboardContentChooser systemMultiClipboardContentChooser = new SystemMultiClipboardContentChooser(project,
+                    "Choose System Content to Paste",
+                    true);
+            if (systemMultiClipboardContentChooser.showAndGet()) {
+                java.util.List<Transferable> selectedContents = systemMultiClipboardContentChooser.getSelectedContents();
+                selectedContents.forEach((Transferable transferable) -> {
+                    if (transferable instanceof StringSelection stringSelection) {
+                        try {
+                            Messages.showInfoMessage((String) stringSelection.getTransferData(DataFlavor.stringFlavor), "Will Paste");
+                        } catch (UnsupportedFlavorException | IOException ignore) {
+                        }
+                    }
+                });
+            }
         });
         toolbar.add(clearButton);
         toolbar.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 0));
