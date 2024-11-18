@@ -49,7 +49,7 @@
         <toolWindow
                 factoryClass="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardToolWindowFactory"
                 id="System Clipboard History"
-                anchor="top"
+                anchor="right"
                 icon="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardIcons.ToolWindow"
                 secondary="true"
         />
