@@ -11,17 +11,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class SystemMultiClipboardToolWindow {
 
     @NotNull
-    private final Project project;
     private final JPanel contentToolWindow;
 
     public SystemMultiClipboardToolWindow(@NotNull Project project) {
-        this.project = project;
         ListWrappingTableModel clipboardTextsModel = ApplicationManager.getApplication().getService(SystemMultiClipboardService.class).getTableModel();
         JBTable clipboardTexts = new JBTable(clipboardTextsModel);
         clipboardTexts.getTableHeader().setEnabled(false);
@@ -33,8 +32,9 @@ public class SystemMultiClipboardToolWindow {
         contentToolWindow.add(scrollPane, BorderLayout.CENTER);
 
         JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        JButton clearButton = new JButton(AllIcons.General.Remove);
-        clearButton.setToolTipText("Clear Clips");
+        JButton clearButton = new JButton(AllIcons.Actions.DeleteTag);
+        Border border = clearButton.getBorder();
+        clearButton.setToolTipText("Remove All");
         clearButton.addActionListener((ActionEvent actionEvent) -> {
             ApplicationManager.getApplication().getService(SystemMultiClipboardService.class).clearClipboardTextTransferables();
         });

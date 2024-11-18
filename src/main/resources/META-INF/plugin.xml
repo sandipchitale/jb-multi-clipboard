@@ -63,7 +63,7 @@
     </extensions>
     <actions>
         <action id="SystemMultiClipboardPasteAction"
-                text="Paste from System Clipboard History"
+                text="Paste from System Clipboard History..."
                 icon="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardIcons.ToolWindow"
                 class="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardPasteAction"/>
     </actions>
