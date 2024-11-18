@@ -24,7 +24,6 @@ public class SystemMultiClipboardToolWindow {
     public SystemMultiClipboardToolWindow(@NotNull Project project) {
         DefaultTableModel clipboardTextsTableModel = ApplicationManager.getApplication().getService(SystemMultiClipboardService.class).getTableModel();
         JBTable clipboardTextsTable = new JBTable(clipboardTextsTableModel);
-        clipboardTextsTable.getTableHeader().setEnabled(false);
 
         Action deleteClipboardTextAtIndex = new AbstractAction() {
             public void actionPerformed(ActionEvent actionEvent) {
@@ -39,6 +38,8 @@ public class SystemMultiClipboardToolWindow {
         column.setMinWidth(100);
         column.setWidth(100);
         column.setMaxWidth(100);
+
+        clipboardTextsTable.setTableHeader(null);
 
         contentToolWindow = new SimpleToolWindowPanel(true, true);
         JBScrollPane scrollPane = new JBScrollPane(clipboardTextsTable,
