@@ -1,38 +1,49 @@
 package dev.sandipchitale.jbmulticlipboard;
 
-import com.intellij.codeInspection.ui.ListWrappingTableModel;
+import com.intellij.icons.AllIcons;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 final public class SystemMultiClipboardServiceImpl implements SystemMultiClipboardService {
 
     private static Clipboard systemClipboard;
     private static String lastClipboardText = null;
-    private static List<String> clipboardTexts;
-    private static ListWrappingTableModel listWrappingTableModel;
+    private static DefaultTableModel clipboardTextsTableModel;
 
     public SystemMultiClipboardServiceImpl() {
         systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 
-        clipboardTexts = new LinkedList<>();
-        listWrappingTableModel = new ListWrappingTableModel(clipboardTexts, "");
+        clipboardTextsTableModel = new DefaultTableModel(
+                new Object[]{
+                        "Clips",
+                        " "
+                }, 0) {
+
+            @Override
+            public Class<?> getColumnClass(int col) {
+                if (col == 1) {
+                    return Icon.class;
+                }
+                return String.class;  //other columns accept String values
+            }
+        };
+
 
         Timer timer = new Timer(1000, (ActionEvent e) -> {
             try {
                 String clipboardText = (String) systemClipboard.getData(DataFlavor.stringFlavor);
                 if (clipboardText != null && !clipboardText.equals(lastClipboardText)) {
-                    if (clipboardTexts.contains(clipboardText)) {
-                        clipboardTexts.remove(clipboardText);
-                    }
-                    clipboardTexts.add(0, clipboardText);
-                    listWrappingTableModel.fireTableDataChanged();
+                    clipboardTextsTableModel.insertRow(0, new Object[]{
+                            clipboardText,
+                            AllIcons.Actions.DeleteTag
+                    });
                     lastClipboardText = clipboardText;
                 }
             } catch (UnsupportedFlavorException | IOException ignore) {
@@ -43,17 +54,20 @@ final public class SystemMultiClipboardServiceImpl implements SystemMultiClipboa
 
     @Override
     public List<Transferable> getClipboardTextTransferables() {
-        return clipboardTexts.stream().map(StringSelection::new).collect(Collectors.toList());
+        List<Transferable> clipboardTextTransferables = new LinkedList<>();
+        for (int i = 0; i < clipboardTextsTableModel.getRowCount(); i++) {
+            clipboardTextTransferables.add(new StringSelection((String) clipboardTextsTableModel.getValueAt(i, 0)));
+        }
+        return clipboardTextTransferables;
     }
 
-    public ListWrappingTableModel getTableModel() {
-        return listWrappingTableModel;
+    public DefaultTableModel getTableModel() {
+        return clipboardTextsTableModel;
     }
 
     @Override
     public void clearClipboardTextTransferables() {
-        clipboardTexts.clear();
-        listWrappingTableModel.fireTableDataChanged();
+        clipboardTextsTableModel.setRowCount(0);
     }
 
     @Override

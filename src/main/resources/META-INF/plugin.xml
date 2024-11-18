@@ -26,7 +26,7 @@
     <change-notes><![CDATA[
         <h2>New Features</h2>
         <ul>
-            <li>Initial implementation</li>
+            <li>Allow deletion by row.</li>
         </ul>
         <h2>Features</h2>
         <ul>

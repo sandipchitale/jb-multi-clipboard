@@ -1,14 +1,13 @@
 package dev.sandipchitale.jbmulticlipboard;
 
-import com.intellij.codeInspection.ui.ListWrappingTableModel;
-
+import javax.swing.table.DefaultTableModel;
 import java.awt.datatransfer.Transferable;
 import java.util.List;
 
 public interface SystemMultiClipboardService {
     List<Transferable> getClipboardTextTransferables();
 
-    ListWrappingTableModel getTableModel();
+    DefaultTableModel getTableModel();
 
     void clearClipboardTextTransferables();
 

@@ -1,6 +1,5 @@
 package dev.sandipchitale.jbmulticlipboard;
 
-import com.intellij.codeInspection.ui.ListWrappingTableModel;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -12,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -21,12 +22,26 @@ public class SystemMultiClipboardToolWindow {
     private final JPanel contentToolWindow;
 
     public SystemMultiClipboardToolWindow(@NotNull Project project) {
-        ListWrappingTableModel clipboardTextsModel = ApplicationManager.getApplication().getService(SystemMultiClipboardService.class).getTableModel();
-        JBTable clipboardTexts = new JBTable(clipboardTextsModel);
-        clipboardTexts.getTableHeader().setEnabled(false);
+        DefaultTableModel clipboardTextsTableModel = ApplicationManager.getApplication().getService(SystemMultiClipboardService.class).getTableModel();
+        JBTable clipboardTextsTable = new JBTable(clipboardTextsTableModel);
+        clipboardTextsTable.getTableHeader().setEnabled(false);
+
+        Action deleteClipboardTextAtIndex = new AbstractAction() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                JTable table = (JTable) actionEvent.getSource();
+                clipboardTextsTableModel.removeRow(Integer.parseInt(actionEvent.getActionCommand()));
+            }
+        };
+
+        ButtonColumn buttonColumn = new ButtonColumn(clipboardTextsTable, deleteClipboardTextAtIndex, 1);
+
+        TableColumn column = clipboardTextsTable.getColumnModel().getColumn(1);
+        column.setMinWidth(100);
+        column.setWidth(100);
+        column.setMaxWidth(100);
 
         contentToolWindow = new SimpleToolWindowPanel(true, true);
-        JBScrollPane scrollPane = new JBScrollPane(clipboardTexts,
+        JBScrollPane scrollPane = new JBScrollPane(clipboardTextsTable,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         contentToolWindow.add(scrollPane, BorderLayout.CENTER);
