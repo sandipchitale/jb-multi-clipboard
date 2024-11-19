@@ -81,12 +81,7 @@ public class SystemMultiClipboardPasteAction extends AnAction implements DumbAwa
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        final boolean enabled = isEnabled(e);
-        if (ActionPlaces.isPopupPlace(e.getPlace())) {
-            e.getPresentation().setVisible(enabled);
-        } else {
-            e.getPresentation().setEnabled(enabled);
-        }
+        e.getPresentation().setEnabled(isEnabled(e));
     }
 
     private static boolean isEnabled(@NotNull AnActionEvent e) {
