@@ -16,7 +16,7 @@
     <description><![CDATA[
     A multi-clipboard that keeps track of copied data in system clipboard by sampling it every second and only noting if the clipboard contents change.
     <br/>
-    <b>IMPORTANT: It is listening to system wide clipboard.</b>
+    <b>IMPORTANT: It is listening to system-wide clipboard.</b>
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
@@ -26,12 +26,15 @@
     <change-notes><![CDATA[
         <h2>New Features</h2>
         <ul>
-            <li>Allow deletion by row.</li>
+            <li>Use <b>Cycle Paste from System Clipboard History</b> action repeatedly within one
+                second to paste next item in the system clipboard history
+            </li>
         </ul>
         <h2>Features</h2>
         <ul>
             <li>Paste from System Clipboard Action</li>
             <li>System Clipboard History tool window to manage the history. For now only supports clear.</li>
+            <li>Allow deletion by row.</li>
         </ul>
         <h2>Known Issues</h2>
         <ul>
@@ -54,7 +57,7 @@
                 secondary="true"
         />
         <notificationGroup
-                id="kubernetesDashboardNotificationGroup"
+                id="systemMultiClipboardNotificationGroup"
                 toolWindowId="System Clipboard History"
                 displayType="TOOL_WINDOW"
         />
@@ -62,9 +65,17 @@
                             serviceImplementation="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardServiceImpl"/>
     </extensions>
     <actions>
-        <action id="SystemMultiClipboardPasteAction"
-                text="Paste from System Clipboard History..."
-                icon="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardIcons.ToolWindow"
-                class="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardPasteAction"/>
+        <action id="SystemMultiClipboardPasteAction" class="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardPasteAction"
+                text="Paste from System Clipboard History"
+                description="Paste from system clipboard history..."
+                icon="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardIcons.ToolWindow"/>
+        <action id="SystemMultiClipboardPastePasteAction" class="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardPastePasteAction"
+                text="Cycle Paste from System Clipboard History"
+                description="Cycle paste from system clipboard history"
+                icon="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardIcons.ToolWindow"/>
+        <action id="SystemMultiClipboardRemoveAllAction" class="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardRemoveAllAction"
+                text="Remove All History"
+                description="Remove all history"
+                icon="AllIcons.Actions.DeleteTagHover"/>
     </actions>
 </idea-plugin>

@@ -42,7 +42,7 @@ final public class SystemMultiClipboardServiceImpl implements SystemMultiClipboa
                 if (clipboardText != null && !clipboardText.equals(lastClipboardText)) {
                     clipboardTextsTableModel.insertRow(0, new Object[]{
                             clipboardText,
-                            AllIcons.Actions.DeleteTag
+                            AllIcons.Actions.DeleteTagHover
                     });
                     lastClipboardText = clipboardText;
                 }
