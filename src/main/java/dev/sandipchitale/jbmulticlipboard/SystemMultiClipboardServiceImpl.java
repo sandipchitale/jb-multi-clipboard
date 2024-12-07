@@ -40,6 +40,17 @@ final public class SystemMultiClipboardServiceImpl implements SystemMultiClipboa
             try {
                 String clipboardText = (String) systemClipboard.getData(DataFlavor.stringFlavor);
                 if (clipboardText != null && !clipboardText.equals(lastClipboardText)) {
+                    // First remove matching text in the history
+                    int rowCount = clipboardTextsTableModel.getRowCount();
+                    if (rowCount > 0) {
+                        for (int i = rowCount - 1; i >= 0; i--) {
+                            String text = (String) clipboardTextsTableModel.getValueAt(i, 0);
+                            if (clipboardText.equals(text)) {
+                                clipboardTextsTableModel.removeRow(i);
+                            }
+                        }
+                    }
+                    // Insert as first (latest) item to the history
                     clipboardTextsTableModel.insertRow(0, new Object[]{
                             clipboardText,
                             AllIcons.Actions.DeleteTagHover

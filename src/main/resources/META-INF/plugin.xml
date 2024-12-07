@@ -26,12 +26,15 @@
     <change-notes><![CDATA[
         <h2>New Features</h2>
         <ul>
-            <li>Use <b>Cycle Paste from System Clipboard History</b> action repeatedly within one
-                second to paste next item in the system clipboard history
+            <li>Use <b>Cycle Paste from Clipboard History</b> action repeatedly within one
+                second to paste next item in the clipboard history
             </li>
         </ul>
         <h2>Features</h2>
         <ul>
+            <li>Use <b>Cycle Paste from System Clipboard History</b> action repeatedly within one
+                second to paste next item in the system clipboard history
+            </li>
             <li>Paste from System Clipboard Action</li>
             <li>System Clipboard History tool window to manage the history. For now only supports clear.</li>
             <li>Allow deletion by row.</li>
@@ -72,6 +75,10 @@
         <action id="SystemMultiClipboardPastePasteAction" class="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardPastePasteAction"
                 text="Cycle Paste from System Clipboard History"
                 description="Cycle paste from system clipboard history"
+                icon="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardIcons.ToolWindow"/>
+        <action id="CyclePasteAction" class="dev.sandipchitale.jbmulticlipboard.CyclePasteAction"
+                text="Cycle Paste from Clipboard History"
+                description="Cycle paste from clipboard history"
                 icon="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardIcons.ToolWindow"/>
         <action id="SystemMultiClipboardRemoveAllAction" class="dev.sandipchitale.jbmulticlipboard.SystemMultiClipboardRemoveAllAction"
                 text="Remove All History"
