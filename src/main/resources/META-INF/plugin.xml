@@ -28,6 +28,8 @@
         <ul>
             <li>Use <b>Cycle Paste from Clipboard History</b> action repeatedly within one
                 second to paste next item in the clipboard history
+
+                <i>This was in response to the resolution of <a href="https://youtrack.jetbrains.com/issue/IJPL-172881">IJPL-172881: Implement cycling through clipboard history by repeatedly invoking a CyclePasteAction within short timeframe .e.g within one sec</a></i>
             </li>
         </ul>
         <h2>Features</h2>
